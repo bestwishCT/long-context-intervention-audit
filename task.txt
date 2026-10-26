@@ -1,0 +1,1 @@
+请只根据所给论文页，解释Lost in the Middle中两个操作是否等价：把相关证据文档移到开头；把问题分别放在材料前后（query-aware contextualization）。分别说明操作对象、保持/改变的变量、key-value与multi-document QA的效果差别、能够和不能够得出的应用建议。不要声称自己复现了论文实验。输出JSON，含decisions数组，每项id为D1到D4，分别对应上述四个问题，含answer、evidence数组（source_id、start_line、end_line，按所给行号，从1起且含两端），以及limitations。不要重抄引文，宿主将按行号提取；证据不足就明确写。尽量1200中文字以内。

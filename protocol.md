@@ -1,0 +1,1 @@
+两次新进程单轮Bohrium调用：baseline、workflow。请求gpt-5-mini/photon，无历史无工具，180秒；服务默认temperature/seed不可锁定。请求前dry-run逐字核对，加独立非语义nonce防缓存。按固定标准审计全部原答，不修改后重新提交模型。网络失败保留并停止，最多一次显式恢复。无实际GPU实验，无省时或稳定增益声称。

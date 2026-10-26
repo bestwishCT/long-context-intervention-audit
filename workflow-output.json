@@ -1,0 +1,47 @@
+{
+  "decisions": [
+    {
+      "id": "D1",
+      "answer": "被移动的对象不同且不是等价操作：\n- “把相关证据文档移到开头”是对文档序列的重排——论文将相关文档放在上下文的起始/中间/末尾以改变相关信息的位置。\n- “把问题分别放在材料前后（query-aware contextualization）”是移动/复制query的位置，使模型在编码文档时能“看到”query（即在数据前后放置query），不是改变文档的相对顺序。\n结论：两者操作对象不同（一个变动的是文档顺序，一个变动的是query位置），因此在含义上并不等价。",
+      "evidence": [
+        { "source_id": "LIM-P2", "start_line": 018, "end_line": 026 },
+        { "source_id": "LIM-P8", "start_line": 032, "end_line": 041 },
+        { "source_id": "LIM-P8", "start_line": 047, "end_line": 049 }
+      ],
+      "limitations": "文中只说明了两种不同的干预（改变文档位置 vs. 改变query位置）；此处结论基于干预对象的描述，不能由此推出任一干预在所有模型/任务上等效。"
+    },
+    {
+      "id": "D2",
+      "answer": "在实验中作者明确区分并受控地改变的变量：\n- 改变文档位置实验（multi-document QA/键值任务）受控变量包括输入上下文长度（例如文档/键值对数量）和相关信息在上下文中的位置（开头/中间/结尾）。\n- query-aware 实验改变的是 query 在提示中的位置（在数据之前和之后），原始设置通常把 query 放在数据之后；这会改变解码器能否在编码文档时访问到 query（decoder-only 模型不能在上下文编码阶段访问末尾的 query）。\n总结：两种干预各自只改变上述变量，其他实验条件保持受控。",
+      "evidence": [
+        { "source_id": "LIM-P2", "start_line": 018, "end_line": 026 },
+        { "source_id": "LIM-P8", "start_line": 033, "end_line": 041 },
+        { "source_id": "LIM-P8", "start_line": 045, "end_line": 049 }
+      ],
+      "limitations": "论文指出这些变量是受控的，但未在本文页给出实验设计的全部细节；不能据此断言没有其他未报告的协变量影响结果。"
+    },
+    {
+      "id": "D3",
+      "answer": "在两类任务上，query-aware 与把相关文档移到开头的效果不同：\n- 键值检索（synthetic key-value）：将 query 放在前后（query-aware）能“显著改善”，使模型在 75/140/300 对键值下几乎达到完美（对某些模型达到完美）。\n- 多文档问答（multi-document QA）：将 query 放前后对鲁棒性影响很小——对文档位置的总体 U 形（首/尾优于中间）趋势影响有限，query-aware 仅在文档位于开头时略有改善，在其它位置有轻微下降。\n因此：在简单的token检索式任务上 query-aware 带来巨大增益，但不能把这一 near-perfect 的增益直接推广为对多文档 QA 相同的提升。",
+      "evidence": [
+        { "source_id": "LIM-P8", "start_line": 050, "end_line": 057 },
+        { "source_id": "LIM-P8", "start_line": 058, "end_line": 066 },
+        { "source_id": "LIM-P8", "start_line": 062, "end_line": 067 },
+        { "source_id": "LIM-P2", "start_line": 027, "end_line": 039 },
+        { "source_id": "LIM-P9", "start_line": 001, "end_line": 007 }
+      ],
+      "limitations": "证据基于论文给出的两类受控任务；不能以此推断对其它任务类别或不同数据分布（例如更复杂的推理式QA）的效果。"
+    },
+    {
+      "id": "D4",
+      "answer": "能提出的应用性建议（受限于论文页的实验描述）：\n- 若系统面临的是“键值/精确token检索”问题，考虑在提示中采用 query-aware（在数据前后放置 query），因为论文观测到这能显著提升到近乎完美的检索效果。 \n- 若目标是多文档问答，优先考虑使相关证据出现在上下文的开头或结尾（论文发现“首/尾优于中间”的 U 型趋势），而不能依赖 query-aware 来保证总体鲁棒性，因为论文显示 query-aware 对该任务影响很小或有轻微下降。\n不能做出的断言：不要将 key-value 任务上的 near-perfect 成果直接作为对多文档 QA 或真实产品场景会带来相同增益的证据；也不能忽略模型架构与训练时上下文长度的影响（encoder-decoder 与序列长度相关的差异会改变效果）。",
+      "evidence": [
+        { "source_id": "LIM-P8", "start_line": 050, "end_line": 057 },
+        { "source_id": "LIM-P9", "start_line": 001, "end_line": 007 },
+        { "source_id": "LIM-P2", "start_line": 033, "end_line": 039 },
+        { "source_id": "LIM-P8", "start_line": 026, "end_line": 031 }
+      ],
+      "limitations": "这些建议基于受控实验观察（论文页所示）；在产品化决策中需额外验证：不同模型（包括规模、架构）、更长/更短上下文长度、真实检索噪声与任务分布都会影响实际效果；本文页不足以支持跨模型或跨任务的普适产品结论。"
+    }
+  ]
+}

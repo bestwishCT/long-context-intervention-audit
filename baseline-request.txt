@@ -1,0 +1,236 @@
+独立记录号 9c5e0fda-a165-4631-aefe-4b27eab19552（不含任务语义）
+请只根据所给论文页，解释Lost in the Middle中两个操作是否等价：把相关证据文档移到开头；把问题分别放在材料前后（query-aware contextualization）。分别说明操作对象、保持/改变的变量、key-value与multi-document QA的效果差别、能够和不能够得出的应用建议。不要声称自己复现了论文实验。输出JSON，含decisions数组，每项id为D1到D4，分别对应上述四个问题，含answer、evidence数组（source_id、start_line、end_line，按所给行号，从1起且含两端），以及limitations。不要重抄引文，宿主将按行号提取；证据不足就明确写。尽量1200中文字以内。
+SOURCE LIM-P2 PDF physical page 2
+001: Figure 1: Changing the location of relevant information
+002: (in this case, the position of the passage that answers
+003: an input question) within the language model’s input
+004: context results in a U-shaped performance curve—
+005: models are better at using relevant information that
+006: occurs at the very beginning (primacy bias) or
+007: end of its input context (recency bias), and per-
+008: formance degrades significantly when models must
+009: access and use information located in the middle of its
+010: input context.
+011: We first experiment with multi-document ques-
+012: tion answering, which requires models to reason
+013: over provided documents to find relevant informa-
+014: tion and use it to answer a given question; this task
+015: mimics the retrieval-augmented generation setup
+016: underlying many commercial generative search
+017: and question answering applications (e.g., Bing
+018: Chat). In this setting, we control (i) the input
+019: context length by changing the number of docu-
+020: ments in the input context (akin to retrieving more
+021: or less documents in retrieval-augmented genera-
+022: tion), and (ii) control the position of the relevant
+023: information within the input context by changing
+024: the order of the documents to place the rele-
+025: vant document at the beginning, middle or end of
+026: the context.
+027: We find that changing the position of relevant
+028: information in the input context can substantially
+029: affect model performance, indicating that current
+030: language models do not robustly access and use
+031: information in long input contexts. Furthermore,
+032: we observe a distinctive U-shaped performance
+033: curve (Figure 1); language model performance
+034: is highest when relevant information occurs at
+035: the very beginning (primacy bias) or end of its
+036: input context (recency bias), and performance
+037: significantly degrades when models must access
+038: and use information in the middle of their in-
+039: put context ( §2.3). For example, when relevant
+040: information is placed in the middle of its in-
+041: put context, GPT-3.5-Turbo’s performance on the
+042: multi-document question task is lower than its per-
+043: formance when predicting without any documents
+044: (i.e., the closed-book setting; 56.1%). Further-
+045: more, we find that models often have identical
+046: performance to their extended-context counter-
+047: parts, indicating that extended-context models are
+048: not necessarily better at using their input context
+049: (§2.3).
+050: Given that language models struggle to re-
+051: trieve and use relevant information in the
+052: multi-document question answering task, to what
+053: extent can language models even retrieve from
+054: their input contexts? We study this question with
+055: a synthetic key-value retrieval task, which is de-
+056: signed to be a minimal testbed for the basic ability
+057: to retrieve matching tokens from the input con-
+058: text. In this task, models are given a collection of
+059: JSON-formatted key-value pairs and must return
+060: the value associated with a specific key. Simi-
+061: lar to the multi-document QA task, the key-value
+062: retrieval task admits controlled changes to the in-
+063: put context length (adding more key-value pairs)
+064: and the position of relevant information. Although
+065: some models perform the synthetic key-value re-
+066: trieval task perfectly, other models struggle to
+067: simply retrieve matching tokens that occur in the
+068: middle of their input context and continue to
+069: exhibit a U-shaped performance curve.
+070: To better understand why language models
+071: struggle to robustly access and use information
+072: in their input contexts, we study the role of model
+073: architecture (decoder-only vs. encoder-decoder),
+074: query-aware contextualization, and instruction
+075: fine-tuning (§4 ) .W ef i n dt h a t :
+076: •Encoder-decoder models are relatively ro-
+077: bust to changes in the position of relevant
+078: information within their input context, but
+079: only when evaluated on sequences within its
+080: training-time sequence length. When eval-
+081: uated on sequences longer than those seen
+082: during training, we observe a U-shaped
+083: performance curve (§4.1).
+084: •Query-aware contextualization (placing the
+085: query before and after the documents or
+086: 158
+
+SOURCE LIM-P8 PDF physical page 8
+001: Figure 8: When encoder-decoder models (Flan-UL2 and Flan-T5-XXL) evaluated on sequences that are shorter
+002: than their encoder’s training-time maximum sequence length (2048 and 512 tokens, respectively), they are
+003: relatively robust to changes in the position of relevant information within their input context (left subplot). In
+004: contrast, when these models are evaluated on sequences longer than those seen during training (center and right
+005: subplots), we observe a U-shaped performance curve—performance is higher when relevant information occurs
+006: at the beginning or end of the input context, as opposed to the middle of the input context.
+007: these maximum context lengths; Shaham et al.
+008: (2023) find that both models can perform well
+009: with sequences of up to 8K tokens.
+010: Figure 8 compares the performance of
+011: decoder-only and encoder-decoder models. When
+012: Flan-UL2 is evaluated on sequences within
+013: its 2048-token training-time context window
+014: (Figure 8; left subplot), its performance is rela-
+015: tively robust to changes in the position of relevant
+016: information within the input context (1.9%
+017: absolute difference between best- and worst-case
+018: performance). When evaluated on settings with
+019: sequences longer than 2048 tokens (Figure 8;
+020: center and right), Flan-UL2 performance begins
+021: to degrade when relevant information is placed
+022: in the middle. Flan-T5-XXL shows a similar
+023: trend, where longer input contexts result in a
+024: greater performance degradation when placing
+025: relevant information in the middle of the input
+026: context. We hypothesize that encoder-decoder
+027: models may make better use of their context
+028: windows because their bidirectional encoder
+029: allows processing each document in the context of
+030: future documents, potentially improving relative
+031: importance estimation between documents.
+032: 4.2 Effect of Query-Aware Contextualization
+033: Our multi-document QA and key-value retrieval
+034: experiments place the query (i.e., question to an-
+035: swer or key to retrieve) after the data to process
+036: (i.e., the documents or the key-value pairs). As
+037: a result, decoder-only models cannot attend to
+038: query tokens when contextualizing documents or
+039: key-value pairs, since the query only appears at
+040: the end of the prompt and decoder-only models
+041: can only attend to prior tokens at each timestep.
+042: In contrast, encoder-decoder models (which seem
+043: more robust to changes in the position of rele-
+044: vant information;§4.1) use a bidirectional encoder
+045: to contextualize input contexts—can we use
+046: this observation to improve decoder-only mod-
+047: els by placing the query before and after the
+048: data, enabling query-aware contextualization of
+049: documents (or key-value pairs)?
+050: We find that query-aware contextualization dra-
+051: matically improves performance on the key-value
+052: retrieval task—all models achieve near-perfect
+053: performance on the 75, 140, and 300 key-value
+054: pair settings. For example, GPT-3.5-Turbo (16K)
+055: with query-aware contextualization achieves per-
+056: fect performance when evaluated with 300
+057: key-value pairs.
+058: In contrast, without query-aware contextual-
+059: ization, the worst-case performance is 45.6%
+060: (Figure 7). Despite the significant impact on
+061: key-value retrieval performance, query-aware
+062: contextualization minimally affects performance
+063: trends in the multi-document question answering
+064: task (Figure 9); it slightly improves performance
+065: when the relevant information is located at the
+066: very beginning of the input context, but slightly
+067: decreases performance in other settings.
+068: 4.3 Effect of Instruction Fine-Tuning
+069: The models we evaluated are all instruction
+070: fine-tuned—after their initial pre-training, they
+071: 164
+
+SOURCE LIM-P9 PDF physical page 9
+001: Figure 9: Query-aware contextualization (placing the
+002: query before and after the documents) does not
+003: substantially improve robustness of language mod-
+004: els to changing the position of relevant information
+005: in multi-document QA; performance slightly increases
+006: when relevant information occurs at the very beginning,
+007: but otherwise slightly decreases.
+008: undergo supervised fine-tuning on a dataset of
+009: instructions and responses. The task specifica-
+010: tion and/or instruction is commonly placed at
+011: the beginning of the input context in super-
+012: vised instruction fine-tuning data, which might
+013: lead instruction fine-tuned language models to
+014: place more weight on the start of the input
+015: context. To better understand the potential ef-
+016: fects of instruction fine-tuning on how language
+017: models use long input contexts, we compare the
+018: multi-document question answering performance
+019: of MPT-30B-Instruct against its base model (i.e.,
+020: before instruction fine-tuning) MPT-30B. We use
+021: the same experimental setup as §2.
+022: Figure 10 compares the multi-document QA
+023: performance of MPT-30B and MPT-30B-Instruct
+024: as a function of the position of the relevant in-
+025: formation in the input context. Surprisingly, we
+026: see that both MPT-30B and MPT-30B-Instruct
+027: exhibit a U-shaped performance curve, where per-
+028: formance is highest when relevant information
+029: occurs at the very beginning or very end of the
+030: context. Although the absolute performance of
+031: MPT-30B-Instruct is uniformly higher than that
+032: of MPT-30B, their overall performance trends
+033: are similar. We also observe that instruction
+034: fine-tuning slightly reduces the worst-case per-
+035: formance disparity from nearly 10% between the
+036: Figure 10: Multi-document QA performance of
+037: MPT-30B-Instruct compared against its base model
+038: (i.e., before instruction fine-tuning) MPT-30B. Both
+039: models have a U-shaped performance curve, where
+040: performance is much higher when relevant information
+041: occurs at the start or end of the input context, indicat-
+042: ing that the instruction fine-tuning process itself is not
+043: necessarily responsible for these performance trends.
+044: base model best- and worst-case performance to
+045: around 4%.
+046: These observations complement prior work,
+047: which found that non-instruction fine-tuned lan-
+048: guage models are biased towards recent tokens
+049: (i.e., the end of the input context; Khandelwal
+050: et al., 2018; Press et al., 2021). This recency bias
+051: has been observed in past work when evaluat-
+052: ing models on next-word prediction of contiguous
+053: text, a setting where language models minimally
+054: benefit from long-range information (Sun et al.,
+055: 2021). In contrast, our results show that language
+056: models are capable of using longer-range informa-
+057: tion (i.e., the beginning of the input context) when
+058: prompted with instruction-formatted data. We hy-
+059: pothesize that non-instruction fine-tuned language
+060: models learn to use these long contexts from sim-
+061: ilarly formatted data that may occur in Internet
+062: text seen during pre-training, e.g., StackOverflow
+063: questions and answers.
+064: To better understand the effect of additional
+065: fine-tuning and model scale, we also experimented
+066: with Llama-2 models of varying sizes (7B, 13B,
+067: and 70B) with and without additional supervised
+068: fine-tuning and reinforcement learning from hu-
+069: man feedback (Appendix E). We find that the
+070: U-shaped performance curve only appears in suf-
+071: ficiently large language models (with or without
+072: 165

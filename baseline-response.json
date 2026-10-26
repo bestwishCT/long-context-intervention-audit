@@ -1,0 +1,124 @@
+{
+  "ok": true,
+  "data": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "annotations": [],
+          "content": "{\n  \"decisions\": [\n    {\n      \"id\": \"D1\",\n      \"answer\": \"两者不等价。把相关证据文档移到开头是直接改变“相关信息在上下文中的位置”；而把问题放在材料前后（query-aware contextualization）是改变查询与材料的相对顺序，使解码器在“构建上下文”时能见到查询。论文报告：query-aware 对键-值检索能带来大幅提升，但对多文档 QA 仅有细微或负向影响，且 decoder-only 在 query 在末尾时无法在构建文档表示时利用查询（见证据）。\",\n      \"evidence\": [\n        { \"source_id\": \"LIM-P2\", \"start_line\": 22, \"end_line\": 26 },\n        { \"source_id\": \"LIM-P8\", \"start_line\": 32, \"end_line\": 41 },\n        { \"source_id\": \"LIM-P8\", \"start_line\": 50, \"end_line\": 57 },\n        { \"source_id\": \"LIM-P9\", \"start_line\": 1, \"end_line\": 7 }\n      ],\n      \"limitations\": \"基于论文给出的对比结果与机制性描述；页面未给出所有模型/任务的横向比较，不能证明在所有模型或现实检索管线下均成立。\"\n    },\n    {\n      \"id\": \"D2\",\n      \"answer\": \"操作对象与改变的变量不同：移动相关证据对象于文档序列层面，改变的是“相关信息在输入上下文中的位置”（论文通过改变文档顺序控制位置与上下文长度）。query-aware 则改变查询在提示中的位置（将 query 放在材料前后），保持文档内部顺序但改变模型在构建文档表示时能否看到查询（decoder-only 若 query 在末尾则不能在编码阶段使用）。两者分别操控“证据位置”与“查询可见性/上下文化”。\",\n      \"evidence\": [\n        { \"source_id\": \"LIM-P2\", \"start_line\": 18, \"end_line\": 26 },\n        { \"source_id\": \"LIM-P8\", \"start_line\": 36, \"end_line\": 41 },\n        { \"source_id\": \"LIM-P8\", \"start_line\": 45, \"end_line\": 49 }\n      ],\n      \"limitations\": \"论文说明了如何控制位置与长度，但未在这些页详细列出所有实验设计细节（如是否同时改变两者或交互效应的全参数扫描）。\"\n    },\n    {\n      \"id\": \"D3\",\n      \"answer\": \"两种操作对 key-value 任务与多文档 QA 的效果差别明显：query-aware 对 key-value 检索“显著提升”，论文报告所有模型在多种规模的 key-value 设置上接近完美；而在多文档 QA 上，query-aware 仅带来极小改善（在相关信息位于最前端时）或轻微下降，总体没有实质性提高模型对中间信息的鲁棒性。另据论文，两类任务都会呈现“相关信息位于中间时性能下降（U 型）”，但 query-aware 能基本消除 key-value 的失败而不能消除多文档 QA 的中间衰减。\",\n      \"evidence\": [\n        { \"source_id\": \"LIM-P8\", \"start_line\": 50, \"end_line\": 57 },\n        { \"source_id\": \"LIM-P8\", \"start_line\": 58, \"end_line\": 67 },\n        { \"source_id\": \"LIM-P2\", \"start_line\": 55, \"end_line\": 69 },\n        { \"source_id\": \"LIM-P9\", \"start_line\": 1, \"end_line\": 7 }\n      ],\n      \"limitations\": \"页面给出关键结果摘要与示例（如 GPT-3.5-Turbo 在某设置），但未提供所有任务变体、评价度量与数据集细节，不能推断对所有 QA 风格或现实检索结果的通用性。\"\n    },\n    {\n      \"id\": \"D4\",\n      \"answer\": \"可得出的应用建议：如果目标是精确的键-值或显式 token 检索（synthetic key-value），对 decoder-only 模型采用 query-aware（在材料前后放 query）是高效且立竿见影的方法；若任务是开放式多文档 QA，则单纯把 query 前置/后置不能可靠解决“中间信息难取用”问题，仍可能需要改用 encoder-decoder 架构、调整检索排序（把相关文档放前或后）或其他方法。不能得出的建议：不能断言 query-aware 对所有真实检索增强生成场景均有效，也不能仅靠这两项操作取代改模型架构或检索策略的需要。\",\n      \"evidence\": [\n        { \"source_id\": \"LIM-P8\", \"start_line\": 46, \"end_line\": 57 },\n        { \"source_id\": \"LIM-P9\", \"start_line\": 1, \"end_line\": 7 },\n        { \"source_id\": \"LIM-P8\", \"start_line\": 26, \"end_line\": 31 },\n        { \"source_id\": \"LIM-P2\", \"start_line\": 27, \"end_line\": 36 }\n      ],\n      \"limitations\": \"论文页只报告了受控的多文档 QA 与合成 key-value 任务上的结果，缺少对真实检索噪声、检索排序策略、多轮交互与更多模型/数据规模的直接证据，因而应用建议需在目标场景下小规模验证。\"\n    }\n  ]\n}",
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "role": "assistant"
+        },
+        "provider_specific_fields": {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "protected_material_code": {
+              "detected": false,
+              "filtered": false
+            },
+            "protected_material_text": {
+              "detected": false,
+              "filtered": false
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          }
+        }
+      }
+    ],
+    "created": 1792984742,
+    "id": "chatcmpl-Ed5Wg1SmP92iJlPKx8d8FPLzpfLwB",
+    "model": "chenkun/gpt-5-mini",
+    "object": "chat.completion",
+    "prompt_filter_results": [
+      {
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "prompt_index": 0
+      }
+    ],
+    "routing": {
+      "serving_pipereplica": "d20261006152623-92787d7a-default-r0-dp0-default"
+    },
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 2701,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 1408,
+        "rejected_prediction_tokens": 0
+      },
+      "latency_checkpoint": {
+        "engine_tbt_ms": 6,
+        "engine_ttft_ms": 48,
+        "engine_ttlt_ms": 16899,
+        "pre_inference_ms": 123,
+        "service_tbt_ms": 6,
+        "service_ttft_ms": 218,
+        "service_ttlt_ms": 17064,
+        "user_visible_ttft_ms": 95
+      },
+      "prompt_tokens": 3034,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0
+      },
+      "total_tokens": 5735
+    }
+  },
+  "notice": {
+    "billing": {
+      "balance": {
+        "redacted": "private account balance"
+      },
+      "sufficient": false
+    }
+  },
+  "meta": {
+    "request_id": "741af141-6cf4-404a-afcf-08fba55cca77",
+    "cli_version": "2.8.1",
+    "cli_commit": "a735f03d78b958fa7836e9a9caf4c65a044e1e88",
+    "cli_modified": false,
+    "command": "bohr chat",
+    "duration_ms": 19720,
+    "timestamp": 1792984760
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "status": "ranges_valid",
+  "errors": [],
+  "semantic": "not_evaluated",
+  "excerpts": [
+    {
+      "decision": "D1",
+      "source_id": "LIM-P2",
+      "start_line": 22,
+      "end_line": 26,
+      "text": "tion), and (ii) control the position of the relevant\ninformation within the input context by changing\nthe order of the documents to place the rele-\nvant document at the beginning, middle or end of\nthe context."
+    },
+    {
+      "decision": "D1",
+      "source_id": "LIM-P8",
+      "start_line": 32,
+      "end_line": 41,
+      "text": "4.2 Effect of Query-Aware Contextualization\nOur multi-document QA and key-value retrieval\nexperiments place the query (i.e., question to an-\nswer or key to retrieve) after the data to process\n(i.e., the documents or the key-value pairs). As\na result, decoder-only models cannot attend to\nquery tokens when contextualizing documents or\nkey-value pairs, since the query only appears at\nthe end of the prompt and decoder-only models\ncan only attend to prior tokens at each timestep."
+    },
+    {
+      "decision": "D1",
+      "source_id": "LIM-P8",
+      "start_line": 50,
+      "end_line": 57,
+      "text": "We find that query-aware contextualization dra-\nmatically improves performance on the key-value\nretrieval task—all models achieve near-perfect\nperformance on the 75, 140, and 300 key-value\npair settings. For example, GPT-3.5-Turbo (16K)\nwith query-aware contextualization achieves per-\nfect performance when evaluated with 300\nkey-value pairs."
+    },
+    {
+      "decision": "D1",
+      "source_id": "LIM-P9",
+      "start_line": 1,
+      "end_line": 7,
+      "text": "Figure 9: Query-aware contextualization (placing the\nquery before and after the documents) does not\nsubstantially improve robustness of language mod-\nels to changing the position of relevant information\nin multi-document QA; performance slightly increases\nwhen relevant information occurs at the very beginning,\nbut otherwise slightly decreases."
+    },
+    {
+      "decision": "D2",
+      "source_id": "LIM-P2",
+      "start_line": 18,
+      "end_line": 26,
+      "text": "Chat). In this setting, we control (i) the input\ncontext length by changing the number of docu-\nments in the input context (akin to retrieving more\nor less documents in retrieval-augmented genera-\ntion), and (ii) control the position of the relevant\ninformation within the input context by changing\nthe order of the documents to place the rele-\nvant document at the beginning, middle or end of\nthe context."
+    },
+    {
+      "decision": "D2",
+      "source_id": "LIM-P8",
+      "start_line": 36,
+      "end_line": 41,
+      "text": "(i.e., the documents or the key-value pairs). As\na result, decoder-only models cannot attend to\nquery tokens when contextualizing documents or\nkey-value pairs, since the query only appears at\nthe end of the prompt and decoder-only models\ncan only attend to prior tokens at each timestep."
+    },
+    {
+      "decision": "D2",
+      "source_id": "LIM-P8",
+      "start_line": 45,
+      "end_line": 49,
+      "text": "to contextualize input contexts—can we use\nthis observation to improve decoder-only mod-\nels by placing the query before and after the\ndata, enabling query-aware contextualization of\ndocuments (or key-value pairs)?"
+    },
+    {
+      "decision": "D3",
+      "source_id": "LIM-P8",
+      "start_line": 50,
+      "end_line": 57,
+      "text": "We find that query-aware contextualization dra-\nmatically improves performance on the key-value\nretrieval task—all models achieve near-perfect\nperformance on the 75, 140, and 300 key-value\npair settings. For example, GPT-3.5-Turbo (16K)\nwith query-aware contextualization achieves per-\nfect performance when evaluated with 300\nkey-value pairs."
+    },
+    {
+      "decision": "D3",
+      "source_id": "LIM-P8",
+      "start_line": 58,
+      "end_line": 67,
+      "text": "In contrast, without query-aware contextual-\nization, the worst-case performance is 45.6%\n(Figure 7). Despite the significant impact on\nkey-value retrieval performance, query-aware\ncontextualization minimally affects performance\ntrends in the multi-document question answering\ntask (Figure 9); it slightly improves performance\nwhen the relevant information is located at the\nvery beginning of the input context, but slightly\ndecreases performance in other settings."
+    },
+    {
+      "decision": "D3",
+      "source_id": "LIM-P2",
+      "start_line": 55,
+      "end_line": 69,
+      "text": "a synthetic key-value retrieval task, which is de-\nsigned to be a minimal testbed for the basic ability\nto retrieve matching tokens from the input con-\ntext. In this task, models are given a collection of\nJSON-formatted key-value pairs and must return\nthe value associated with a specific key. Simi-\nlar to the multi-document QA task, the key-value\nretrieval task admits controlled changes to the in-\nput context length (adding more key-value pairs)\nand the position of relevant information. Although\nsome models perform the synthetic key-value re-\ntrieval task perfectly, other models struggle to\nsimply retrieve matching tokens that occur in the\nmiddle of their input context and continue to\nexhibit a U-shaped performance curve."
+    },
+    {
+      "decision": "D3",
+      "source_id": "LIM-P9",
+      "start_line": 1,
+      "end_line": 7,
+      "text": "Figure 9: Query-aware contextualization (placing the\nquery before and after the documents) does not\nsubstantially improve robustness of language mod-\nels to changing the position of relevant information\nin multi-document QA; performance slightly increases\nwhen relevant information occurs at the very beginning,\nbut otherwise slightly decreases."
+    },
+    {
+      "decision": "D4",
+      "source_id": "LIM-P8",
+      "start_line": 46,
+      "end_line": 57,
+      "text": "this observation to improve decoder-only mod-\nels by placing the query before and after the\ndata, enabling query-aware contextualization of\ndocuments (or key-value pairs)?\nWe find that query-aware contextualization dra-\nmatically improves performance on the key-value\nretrieval task—all models achieve near-perfect\nperformance on the 75, 140, and 300 key-value\npair settings. For example, GPT-3.5-Turbo (16K)\nwith query-aware contextualization achieves per-\nfect performance when evaluated with 300\nkey-value pairs."
+    },
+    {
+      "decision": "D4",
+      "source_id": "LIM-P9",
+      "start_line": 1,
+      "end_line": 7,
+      "text": "Figure 9: Query-aware contextualization (placing the\nquery before and after the documents) does not\nsubstantially improve robustness of language mod-\nels to changing the position of relevant information\nin multi-document QA; performance slightly increases\nwhen relevant information occurs at the very beginning,\nbut otherwise slightly decreases."
+    },
+    {
+      "decision": "D4",
+      "source_id": "LIM-P8",
+      "start_line": 26,
+      "end_line": 31,
+      "text": "context. We hypothesize that encoder-decoder\nmodels may make better use of their context\nwindows because their bidirectional encoder\nallows processing each document in the context of\nfuture documents, potentially improving relative\nimportance estimation between documents."
+    },
+    {
+      "decision": "D4",
+      "source_id": "LIM-P2",
+      "start_line": 27,
+      "end_line": 36,
+      "text": "We find that changing the position of relevant\ninformation in the input context can substantially\naffect model performance, indicating that current\nlanguage models do not robustly access and use\ninformation in long input contexts. Furthermore,\nwe observe a distinctive U-shaped performance\ncurve (Figure 1); language model performance\nis highest when relevant information occurs at\nthe very beginning (primacy bias) or end of its\ninput context (recency bias), and performance"
+    }
+  ]
+}
